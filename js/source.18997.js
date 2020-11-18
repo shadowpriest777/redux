@@ -1855,10 +1855,16 @@ const logger = (0, _reduxLogger.createLogger)({
     error: () => '#ff0005'
   }
 });
+const preloaderState = JSON.parse(localStorage.getItem('gallery'));
 const devtools = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__;
 const composeEnhancer = devtools ? devtools : _redux.compose;
-const store = (0, _redux.createStore)(_rootReducer.rootReducer, composeEnhancer((0, _redux.applyMiddleware)(logger)));
+const enhancerStore = composeEnhancer((0, _redux.applyMiddleware)(logger));
+const store = preloaderState ? (0, _redux.createStore)(_rootReducer.rootReducer, preloaderState, enhancerStore) : (0, _redux.createStore)(_rootReducer.rootReducer, enhancerStore);
 exports.store = store;
+store.subscribe(() => {
+  const state = store.getState();
+  localStorage.setItem('gallery', JSON.stringify(state));
+});
 
 /***/ }),
 /* 31 */
@@ -2064,4 +2070,4 @@ exports.showSelectedPhoto = showSelectedPhoto;
 
 /***/ })
 /******/ ]);
-//# sourceMappingURL=source.36b47.js.map
+//# sourceMappingURL=source.18997.js.map
